@@ -1,0 +1,67 @@
+﻿@model PagedList.IPagedList<KTGK.Models.Category>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" /> 
+<link href = "~/Content/PagedList.css" rel = "stylesheet" type = "text/css" />
+
+@{
+    ViewBag.Title = "Students";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Category</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+@using (Html.BeginForm("Index", "Student", FormMethod.Get))
+{
+    <p>
+        Find by name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+        <input type="submit" value="Search" />
+        
+    </p> 
+}
+<table class="table">
+    <tr>
+        <th>
+            @Html.ActionLink("Category Name", "Index", new { sortOrder = ViewBag.NameSortParm })
+        </th>
+        <th>
+            Category Note
+        </th>
+        
+        <th></th>
+        <th></th>
+
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Categoryname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Categorynote)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Categoryid }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Categoryid }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Categoryid })
+            </td>
+        </tr>
+    }
+
+
+</table>
+
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of
+@Model.PageCount
+@Html.PagedListPager(Model, page => Url.Action("Index",
+ new
+ {
+     page,
+     sortOrder = ViewBag.CurrentSort,
+     currentFilter =
+ViewBag.CurrentFilter
+ }))
